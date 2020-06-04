@@ -36,8 +36,14 @@ gcc -o bin/bintos tools/bintos/src/bintos.c ${TOOLS_FLAGS}
 
 # User tools
 (cd tools/xgmtool/ && gcc -O2 -ggdb src/*.c -Iinc -o xgmtool -lm)
-(cd tools/appack && make -f makefile.elf64)
 cp tools/xgmtool/xgmtool bin/
+
+# More tools, this is a bit hacky but does work
+if [ `getconf LONG_BIT` = "64" ]; then
+	(cd tools/appack && make -f makefile.elf64)
+else
+	(cd tools/appack && make -f makefile.elf)
+fi
 cp ./tools/appack/appack bin/
 
 # Actually build the thing
@@ -65,10 +71,11 @@ cp -r md.ld ${PREFIX}/sgdk/
 
 # Copy the tools too
 cp -r bin/*.jar ${PREFIX}/bin
-cp bin/xgmtool ${PREFIX}/bin
+cp bin/appack ${PREFIX}/bin
+cp bin/bintos ${PREFIX}/bin
 cp bin/sizebnd ${PREFIX}/bin
 cp bin/sjasm ${PREFIX}/bin
-cp bin/bintos ${PREFIX}/bin
+cp bin/xgmtool ${PREFIX}/bin
 
 # The makefile needs to be tweaked a bit unfortunately
 # since it is very windows specific :(
