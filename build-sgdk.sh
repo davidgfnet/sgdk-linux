@@ -33,10 +33,13 @@ cd SGDK-${SGDK_VERSION}
 TOOLS_FLAGS="-O2 -ggdb"
 gcc -o bin/sizebnd tools/sizebnd/src/sizebnd.c ${TOOLS_FLAGS}
 gcc -o bin/bintos tools/bintos/src/bintos.c ${TOOLS_FLAGS}
+strip -s bin/bintos
+strip -s bin/sizebnd
 
 # User tools
 (cd tools/xgmtool/ && gcc -O2 -ggdb src/*.c -Iinc -o xgmtool -lm)
 cp tools/xgmtool/xgmtool bin/
+strip -s bin/xgmtool
 
 # More tools, this is a bit hacky but does work
 if [ `getconf LONG_BIT` = "64" ]; then
