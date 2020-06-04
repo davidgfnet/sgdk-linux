@@ -1,0 +1,103 @@
+diff --git a/makelib.gen b/makelib.gen
+index 5963f33..a2cc009 100644
+--- a/makelib.gen
++++ b/makelib.gen
+@@ -5,19 +5,19 @@ SRC_LIB= $(GDK)/src
+ RES_LIB= $(GDK)/res
+ INCLUDE_LIB= $(GDK)/inc
+ 
+-SHELL= $(BIN)/sh
+-RM= $(BIN)/rm
+-CP= $(BIN)/cp
+-AR= $(BIN)/ar
+-CC= $(BIN)/gcc
+-JAVA= java
+-ECHO= echo
+-OBJCPY= $(BIN)/objcopy
++SHELL=bash
++RM=rm
++CP=cp
++AR=m68k-elf-gcc-ar
++CC=m68k-elf-gcc
++JAVA=java
++ECHO=echo
++OBJCPY= m68k-elf-objcopy
+ ASMZ80= $(BIN)/sjasm
+ SIZEBND= $(BIN)/sizebnd
+ BINTOS= $(BIN)/bintos
+ RESCOMP= $(JAVA) -jar $(BIN)/rescomp.jar
+-MKDIR= $(BIN)/mkdir
++MKDIR=mkdir
+ 
+ SRC_LIB_C= $(wildcard $(SRC_LIB)/*.c)
+ SRC_LIB_S= $(wildcard $(SRC_LIB)/*.s)
+@@ -87,11 +87,11 @@ cleanAsm: cleanasm
+ 
+ 
+ $(LIB)/libmd.a: cmd_
+-	$(AR) rs $(LIB)/libmd.a --plugin=liblto_plugin-0.dll @cmd_
++	$(AR) rs $(LIB)/libmd.a @cmd_
+ 	$(RM) cmd_
+ 
+ $(LIB)/libmd_debug.a: cmd_
+-	$(AR) rs $(LIB)/libmd_debug.a --plugin=liblto_plugin-0.dll @cmd_
++	$(AR) rs $(LIB)/libmd_debug.a @cmd_
+ 	$(RM) cmd_
+ 
+ cmd_ : $(OBJ_LIB)
+--- a/makefile.gen	2020-04-25 23:30:26.000000000 +0200
++++ b/makefile.gen	2020-06-05 00:42:31.765198356 +0200
+@@ -1,4 +1,5 @@
+-BIN= $(GDK)/bin
++GDK=$(GENDEV)/sgdk
++BIN=$(GENDEV)/bin
+ LIB= $(GDK)/lib
+ 
+ LIBSRC= $(GDK)/src
+@@ -9,21 +10,24 @@
+ RES= res
+ INCLUDE= inc
+ 
+-SHELL= $(BIN)/sh
+-RM= $(BIN)/rm
+-CP= $(BIN)/cp
+-CC= $(BIN)/gcc
+-LD= $(BIN)/ld
+-NM= $(BIN)/nm
++SHELL=sh
++RM=rm
++CP=cp
++CC=$(BIN)/m68k-elf-gcc 
++LD=$(BIN)/m68k-elf-ld
++NM=$(BIN)/m68k-elf-gcc-nm
++RANLIB=$(BIN)/m68k-elf-ranlib
++AS=$(BIN)/m68k-elf-as
+ JAVA= java
+ ECHO= echo
+-OBJCPY= $(BIN)/objcopy
+-ASMZ80= $(BIN)/sjasm
+-MACCER= $(BIN)/mac68k
+-SIZEBND= $(BIN)/sizebnd
+-BINTOS= $(BIN)/bintos
+-RESCOMP= $(JAVA) -jar $(BIN)/rescomp.jar
+-MKDIR= $(BIN)/mkdir
++OBJCPY=$(BIN)/m68k-elf-objcopy
++ASMZ80=$(BIN)/sjasm
++MACCER=$(AS)
++SIZEBND=$(BIN)/sizebnd
++BINTOS=$(BIN)/bintos
++RESCOMP=$(JAVA) -jar $(BIN)/rescomp.jar
++MKDIR=mkdir
++XGMTOOL=$(GENBIN)/xgmtool
+ 
+ SRC_C= $(wildcard *.c)
+ SRC_C+= $(wildcard $(SRC)/*.c)
+@@ -114,7 +118,7 @@
+ 	$(SIZEBND) out/rom.bin -sizealign 131072
+ 
+ out/symbol.txt: out/rom.out
+-	$(NM) --plugin=liblto_plugin-0.dll -n out/rom.out > out/symbol.txt
++	$(NM) -n out/rom.out > out/symbol.txt
+ 
+ out/rom.out: out/sega.o out/cmd_ $(LIBMD)
+ 	$(CC) -B$(BIN) -n -T $(GDK)/md.ld -nostdlib out/sega.o @out/cmd_ $(LIBMD) $(LIB)/libgcc.a -o out/rom.out
