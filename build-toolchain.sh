@@ -25,7 +25,7 @@ if [[ ! -d newlib-${NEWLIB_VERSION} ]]; then
 fi
 
 echo "Building and installing binutils..."
-(cd binutils-${BINUTILS_VERSION} && ./configure --prefix=${PREFIX} --target=m68k-elf && make -j `nproc` && make install)
+(cd binutils-${BINUTILS_VERSION} && ./configure --prefix=${PREFIX} --target=m68k-elf && make -j `nproc` && make install-strip)
 
 export PATH=$PATH:${PREFIX}/bin/
 
@@ -35,12 +35,12 @@ NEWLIB_FLAGS="--with-cpu=m68000 --disable-werror --disable-nls --disable-multili
 echo "Building gcc ..."
 rm -rf gcc-build1 gcc-build2
 mkdir -p gcc-build1 gcc-build2
-(cd gcc-build1/ && ../gcc-${GCC_VERSION}/configure --target=m68k-elf --enable-languages=c --prefix=${PREFIX} --without-headers ${GCC_FLAGS} && make -j `nproc` install && make install)
+(cd gcc-build1/ && ../gcc-${GCC_VERSION}/configure --target=m68k-elf --enable-languages=c --prefix=${PREFIX} --without-headers ${GCC_FLAGS} && make -j `nproc` all && make install-strip)
 
 echo "Building newlib ..."
 (cd newlib-${NEWLIB_VERSION} && ./configure --target=m68k-elf --prefix=${PREFIX} ${NEWLIB_FLAGS} && make -j `nproc` all && make install)
 
 echo "Building final gcc ..."
-(cd gcc-build2/ && ../gcc-${GCC_VERSION}/configure --target=m68k-elf --enable-languages=c --prefix=${PREFIX} --with-newlib ${GCC_FLAGS} && make -j `nproc` all && make install)
+(cd gcc-build2/ && ../gcc-${GCC_VERSION}/configure --target=m68k-elf --enable-languages=c --prefix=${PREFIX} --with-newlib ${GCC_FLAGS} && make -j `nproc` all && make install-strip)
 
 
