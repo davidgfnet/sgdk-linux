@@ -7,3 +7,6 @@ NEWLIB_VERSION=3.3.0
 SGDK_VERSION=1.51
 PREFIX=/opt/gendev
 
+# Outdir
+mkdir -p output
+INSTALLDIR=`realpath output`

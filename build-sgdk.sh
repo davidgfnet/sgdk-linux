@@ -1,4 +1,6 @@
 
+set -e
+
 source config.mk
 
 # Fetch the SGDK tarball and unpack it
@@ -50,7 +52,8 @@ fi
 cp ./tools/appack/appack bin/
 
 # Actually build the thing
-export PATH=$PATH:$PREFIX/bin
+OUTDIR=$INSTALLDIR/$PREFIX
+export PATH=$PATH:$OUTDIR/bin
 export GDK=.
 rm lib/*   # This ships some pre-compiled stuff, wipe it!
 make -f makelib.gen cleanrelease
@@ -60,28 +63,30 @@ make -f makelib.gen debug
 
 # libgcc is linked at this location, dunno why
 # I suppose the Win toolchain does not ship it or something
-cp ${PREFIX}/lib/gcc/m68k-elf/${GCC_VERSION}/libgcc.a lib/
+cp ${OUTDIR}/lib/gcc/m68k-elf/${GCC_VERSION}/libgcc.a lib/
 
 # Copy the resulting toolchain to the output path
-mkdir -p ${PREFIX}/sgdk
-mkdir -p ${PREFIX}/sgdk/src
-cp -r lib ${PREFIX}/sgdk
-cp -r inc ${PREFIX}/sgdk
-cp -r doc ${PREFIX}/sgdk
-cp -r res ${PREFIX}/sgdk
-cp -r src/boot ${PREFIX}/sgdk/src
-cp -r md.ld ${PREFIX}/sgdk/
+mkdir -p ${OUTDIR}/sgdk
+mkdir -p ${OUTDIR}/sgdk/src
+cp -r lib ${OUTDIR}/sgdk
+cp -r inc ${OUTDIR}/sgdk
+cp -r doc ${OUTDIR}/sgdk
+cp -r res ${OUTDIR}/sgdk
+cp -r src/boot ${OUTDIR}/sgdk/src
+cp -r md.ld ${OUTDIR}/sgdk/
 
 # Copy the tools too
-cp -r bin/*.jar ${PREFIX}/bin
-cp bin/appack ${PREFIX}/bin
-cp bin/bintos ${PREFIX}/bin
-cp bin/sizebnd ${PREFIX}/bin
-cp bin/sjasm ${PREFIX}/bin
-cp bin/xgmtool ${PREFIX}/bin
+cp -r bin/*.jar ${OUTDIR}/bin
+cp bin/appack ${OUTDIR}/bin
+cp bin/bintos ${OUTDIR}/bin
+cp bin/sizebnd ${OUTDIR}/bin
+cp bin/sjasm ${OUTDIR}/bin
+cp bin/xgmtool ${OUTDIR}/bin
 
 # The makefile needs to be tweaked a bit unfortunately
 # since it is very windows specific :(
-mkdir -p ${PREFIX}/sgdk/mkfiles
-cp makefile.gen ${PREFIX}/sgdk/mkfiles/
+mkdir -p ${OUTDIR}/sgdk/mkfiles
+cp makefile.gen ${OUTDIR}/sgdk/mkfiles/
+
+echo "SGDK built successfully"
 
