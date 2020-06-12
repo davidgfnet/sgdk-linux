@@ -9,6 +9,9 @@ clean:
 	rm -rf build SGDK-1.51 output
 	make -C sjasm clean
 
+install:
+	cp -r output/* $DESTDIR/
+
 cleanall:	clean
 	rm -rf sources
 
