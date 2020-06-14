@@ -15,7 +15,7 @@ clean:
 	make -C sjasm clean
 
 install:
-	cp -r output/* $DESTDIR/
+	cp -r output/* ${DESTDIR}/
 
 cleanall:	clean
 	rm -rf sources downloads
