@@ -3,18 +3,6 @@ set -e
 
 source config.mk
 
-echo "Dowloading sources..."
-mkdir -p downloads
-if [[ ! -f downloads/binutils-${BINUTILS_VERSION}.tar.gz ]]; then
-	wget -O downloads/binutils-${BINUTILS_VERSION}.tar.gz "ftp://ftp.gnu.org/pub/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.gz"
-fi
-if [[ ! -f downloads/gcc-${GCC_VERSION}.tar.gz ]]; then
-	wget -O downloads/gcc-${GCC_VERSION}.tar.gz "ftp://ftp.gnu.org/pub/gnu/gcc/gcc-${GCC_VERSION}/gcc-${GCC_VERSION}.tar.gz"
-fi
-if [[ ! -f downloads/newlib-${NEWLIB_VERSION}.tar.gz ]]; then
-	wget -O downloads/newlib-${NEWLIB_VERSION}.tar.gz "ftp://sourceware.org/pub/newlib/newlib-${NEWLIB_VERSION}.tar.gz"
-fi
-
 echo "Unpacking..."
 mkdir -p sources
 if [[ ! -d sources/binutils-${BINUTILS_VERSION} ]]; then

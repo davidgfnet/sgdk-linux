@@ -3,11 +3,7 @@ set -e
 
 source config.mk
 
-# Fetch the SGDK tarball and unpack it
-mkdir -p downloads
-if [[ ! -f downloads/SGDK-${SGDK_VERSION}.tar.gz ]]; then
-	wget -O downloads/SGDK-${SGDK_VERSION}.tar.gz "https://github.com/Stephane-D/SGDK/archive/v${SGDK_VERSION}.tar.gz"
-fi
+# Unpack the SGDK and apply the patches required
 if [[ ! -d SGDK-${SGDK_VERSION} ]]; then
 	tar xf downloads/SGDK-${SGDK_VERSION}.tar.gz
 	# Proceed to apply patches to it. Unfortunately this is necessary
